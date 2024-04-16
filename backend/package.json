@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "http": "^0.0.1-security",
+    "socket.io": "^4.7.5"
+  }
+}
