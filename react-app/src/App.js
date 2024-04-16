@@ -1,23 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:3200'); // Connect to the server
 
 function App() {
+  const [name, setName] = useState('');
+
+  useEffect(() => {
+    // Function to send cursor position to the server
+    const handleMouseMove = (event) => {
+      const position = { x: event.clientX, y: event.clientY, name: 'React' };
+      socket.emit('move cursor', position);
+    };
+
+    // Add event listener for mouse movement
+    document.addEventListener('mousemove', handleMouseMove);
+
+    // Listen for cursor moves from other users
+    socket.on('move cursor', (position) => {
+      const cursor = document.getElementById('cursor');
+      if (cursor) {
+        cursor.style.left = `${position.x}px`;
+        cursor.style.top = `${position.y}px`;
+        setName(position.name);
+      }
+    });
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      socket.off('move cursor');
+    };
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Cursor Tracker</h1>
+      <div id="cursor" style={{ position: 'absolute', width: '10px', height: '10px', backgroundColor: 'red' }}>{name}</div>
     </div>
   );
 }
