@@ -1,0 +1,14 @@
+{
+    "name": "live-cursor-example",
+    "version": "1.0.0",
+    "scripts": {
+      "start": "concurrently \"npm run start:backend\" \"npm run start:angular\" \"npm run start:react\"",
+      "start:backend": "cd backend && npm start",
+      "start:angular": "cd angular && npm start",
+      "start:react": "cd react-app && npm start"
+    },
+    "devDependencies": {
+      "concurrently": "^7.0.0"
+    }
+  }
+  
